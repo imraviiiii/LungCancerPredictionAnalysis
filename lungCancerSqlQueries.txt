@@ -1,0 +1,248 @@
+-- use lungcancerprediction;
+-- SELECT  * FROM lung_cancer_data
+
+-- 1. Retrieve all records for individuals diagnosed with lung cancer.
+-- SELECT 
+--     *
+-- FROM
+--     lung_cancer_data
+-- WHERE
+--     Lung_Cancer_Diagnosis = 'Yes';
+
+-- 2. Count the number of smokers and non-smokers.
+-- SELECT 
+--     smoker, COUNT(*) CountOfSmokerAndNonSmoker
+-- FROM
+--     lung_cancer_data
+-- GROUP BY smoker;
+
+-- 3. List all unique cancer stages present in the dataset.
+-- SELECT DISTINCT
+--     cancer_stage
+-- FROM
+--     lung_cancer_data
+
+-- 4. Retrieve the average number of cigarettes smoked per day by smokers.
+-- SELECT 
+--     AVG(Cigarettes_per_Day) AS Avg_Cigarettes_Per_Day
+-- FROM
+--     lung_cancer_data
+-- WHERE
+--     smoker = 'Yes';
+
+-- 5. Count the number of people exposed to high air pollution.
+-- SELECT 
+--     COUNT(*) AS High_Air_Pollution_Count
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- WHERE
+--     Air_Pollution_Exposure = 'High';
+
+-- 6. Find the top 5 countries with the highest lung cancer deaths.
+-- SELECT DISTINCT
+--     Country, Annual_Lung_Cancer_Deaths
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- ORDER BY Annual_Lung_Cancer_Deaths DESC
+-- LIMIT 5;
+
+-- 7. Count the number of people diagnosed with lung cancer by gender.
+-- SELECT 
+--     Gender, COUNT(*) AS Lung_Cancer_Count
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- WHERE
+--     Lung_Cancer_Diagnosis = 'Yes'
+-- GROUP BY Gender;
+
+-- 8. Retrieve records of individuals older than 60 who are diagnosed with lung cancer.
+-- SELECT 
+--     *
+-- FROM
+--     lung_cancer_data
+-- WHERE
+--     Lung_Cancer_Diagnosis = 'Yes'
+--         AND Age > 60;
+
+-- 9. Find the percentage of smokers who developed lung cancer.
+-- SELECT 
+--     (COUNT(CASE
+--         WHEN
+--             Smoker = 'Yes'
+--                 AND Lung_Cancer_Diagnosis = 'Yes'
+--         THEN
+--             1
+--     END) / COUNT(CASE
+--         WHEN Smoker = 'Yes' THEN 1
+--     END)) * 100 AS SmokerbyLungCancer
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+
+-- 10. Calculate the average survival years based on cancer stages.
+-- SELECT 
+--     Cancer_Stage, AVG(Survival_Years) AS Avg_Survival_Years
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- WHERE
+--     Lung_Cancer_Diagnosis = 'Yes'
+-- GROUP BY 1;
+
+-- 11. Count the number of lung cancer patients based on passive smoking.
+-- SELECT 
+--     Passive_Smoker, COUNT(*) AS Lung_Cancer_Count
+-- FROM
+--     lung_cancer_data
+-- WHERE
+--     Lung_Cancer_Diagnosis = 'Yes'
+-- GROUP BY Passive_Smoker;
+
+
+-- 12. Find the country with the highest lung cancer prevalence rate.
+-- SELECT 
+--     Country,
+--     sum(case when Lung_Cancer_Diagnosis = 'Yes' then 1 else 0 end) lung_cancer_cases,
+--     count(*) total_pop,
+--     100*sum(case when Lung_Cancer_Diagnosis = 'Yes' then 1 else 0 end)/count(*) as lung_cancer_prevalence_rate
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- GROUP BY Country
+-- ORDER BY 4 DESC
+
+-- 13. Identify the smoking years' impact on lung cancer.
+-- SELECT 
+--     Years_of_Smoking, COUNT(*) AS Lung_Cancer_Cases
+-- FROM
+--     lung_cancer_data
+-- WHERE
+--     Lung_Cancer_Diagnosis = 'Yes'
+-- GROUP BY Years_of_Smoking
+-- ORDER BY Years_of_Smoking;
+
+-- 14. Determine the mortality rate for patients with and without early detection.
+-- SELECT 
+--     Early_Detection, AVG(Mortality_Rate) AS Avg_Mortality_Rate
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- WHERE
+--     Lung_Cancer_Diagnosis = 'Yes'
+-- GROUP BY 1;
+
+-- 15. Group the lung cancer prevalence rate by developed vs. developing countries.
+-- SELECT 
+--     Country,
+--     Developed_or_Developing,
+--     AVG(Lung_Cancer_Prevalence_Rate) AS Avg_Lung_Cancer_Prevalence_Rate
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- GROUP BY Country , Developed_or_Developing;
+
+-- SELECT 
+--     Developed_or_Developing,
+--     AVG(Lung_Cancer_Prevalence_Rate) AS Avg_Prevalence_Rate
+-- FROM
+--     lung_cancer_data
+-- GROUP BY Developed_or_Developing;
+
+-- 16. Identify the correlation between lung cancer prevalence and air pollution levels.
+-- SELECT 
+--     Air_Pollution_Exposure,
+--     AVG(Lung_Cancer_Prevalence_Rate) AS Avg_Prevalence_Rate
+-- FROM
+--     lung_cancer_data
+-- GROUP BY Air_Pollution_Exposure
+-- ORDER BY Avg_Prevalence_Rate DESC;
+
+-- 17. Find the average age of lung cancer patients for each country.
+-- SELECT 
+--     Country, AVG(Age) AS Avg_Age
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- WHERE
+--     Lung_Cancer_Diagnosis = 'Yes'
+-- GROUP BY Country
+-- ORDER BY Avg_Age DESC;
+
+-- 18. Calculate the risk factor of lung cancer by smoker status, passive smoking, and family history.
+-- SELECT 
+--     Smoker,
+--     Passive_Smoker,
+--     Family_History,
+--     COUNT(*) AS Total_Cases,
+--     SUM(CASE
+--         WHEN Lung_Cancer_Diagnosis = 'Yes' THEN 1
+--         ELSE 0
+--     END) AS Lung_Cancer_Cases,
+--     (SUM(CASE
+--         WHEN Lung_Cancer_Diagnosis = 'Yes' THEN 1
+--         ELSE 0
+--     END) * 100.0 / COUNT(*)) AS Risk_Factor_Percentage
+-- FROM
+--     lung_cancer_data
+-- GROUP BY Smoker , Passive_Smoker , Family_History
+-- ORDER BY Risk_Factor_Percentage DESC;
+
+-- 19. Rank countries based on their mortality rate.
+-- SELECT Country, 
+--        AVG(Mortality_Rate) AS Avg_Mortality_Rate,
+--        RANK() OVER (ORDER BY AVG(Mortality_Rate) DESC) AS RankCountry
+-- FROM lung_cancer_data
+-- GROUP BY Country
+-- ORDER BY Avg_Mortality_Rate DESC;
+
+-- 20. Determine if treatment type has a significant impact on survival years.
+-- SELECT 
+--     Treatment_Type,
+--     COUNT(*) AS Patient_Count,
+--     AVG(Survival_Years) AS Avg_Survival_Years
+-- FROM
+--     lung_cancer_data
+-- WHERE
+--     Survival_Years IS NOT NULL
+-- GROUP BY Treatment_Type
+-- ORDER BY Avg_Survival_Years DESC;
+
+-- 21. Compare lung cancer prevalence in men vs. women across countries.
+-- SELECT 
+--     Country,
+--     Gender,
+--     COUNT(*) AS Total_Cases,
+--     AVG(Lung_Cancer_Prevalence_Rate) AS Avg_Prevalence_Rate
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- WHERE
+--     Lung_Cancer_Diagnosis = 'Yes'
+-- GROUP BY Country , Gender
+-- ORDER BY Country , Gender;
+
+-- 22. Find how occupational exposure, smoking, and air pollution collectively impact lung cancer rates.
+-- SELECT 
+--     Occupational_Exposure,
+--     Smoker,
+--     Air_Pollution_Exposure,
+--     COUNT(*) AS Total_Cases,
+--     SUM(CASE
+--         WHEN Lung_Cancer_Diagnosis = 'Yes' THEN 1
+--         ELSE 0
+--     END) AS Lung_Cancer_Cases,
+--     (SUM(CASE
+--         WHEN Lung_Cancer_Diagnosis = 'Yes' THEN 1
+--         ELSE 0
+--     END) * 100.0 / COUNT(*)) AS Cancer_Risk_Percentage
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- GROUP BY Occupational_Exposure , Smoker , Air_Pollution_Exposure
+-- ORDER BY Cancer_Risk_Percentage DESC;
+
+-- 23. Analyze the impact of early detection on survival years.
+-- SELECT 
+--     Early_Detection,
+--     COUNT(*) AS Total_Cases,
+--     AVG(Survival_Years) Avg_Survival_Years,
+--     MIN(Survival_Years) AS Min_Survival_Years,
+--     MAX(Survival_Years) AS Max_Survival_Years
+-- FROM
+--     lungcancerprediction.lung_cancer_data
+-- WHERE
+--     Survival_Years IS NOT NULL
+-- GROUP BY Early_Detection
+-- ORDER BY Avg_Survival_Years;
